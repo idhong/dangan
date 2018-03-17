@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>canvas匀速直线运动</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="vue.js"></script>
+    <style>
+      *{margin:0; padding:0;}
+      html{  font-size:12px;}
+      .bj{width:100%; height:31.25rem; background: url(image/aim.jpg) no-repeat center top; background-size:100%; position: relative }
+      .huan{width:6rem; height:6rem; position: absolute; top:12.5rem; left:0; background: url(image/328.png) no-repeat center top;  background-size:100%;
+          transition: all .03s  liner; -webkit-transition: all .03s  liner;}
+        .btn{width:10rem; height:10rem; height:3rem; line-height:3rem; background: #f11; color:#fff; text-align: center; margin:2rem auto; border-radius:1rem;}
+    </style>
+</head>
+<body>
+<div id="app">
+   <div class="bj">
+     <div class="huan" :style="styleObject"></div>
+   </div>
+<div class="btn" @click="start()">start</div> <div class="btn" @click="end()">end</div> 
+</div>
+   <script type="text/javascript">
+
+         var a =750%(30*12);
+		var app = new Vue({
+		  el: '#app',
+		  data: {
+		    message: 'Hello Vue!',
+		    num:30,
+		    width:360,
+		    show:true,
+		    styleObject: {
+			    top: '12.5rem',
+			    left: '0'
+			},
+			datas:[{w:46,t:366,val:0.6},
+			       {w:76,t:322,val:0.6},
+			       {w:97,t:310,val:0.6},
+			       {w:125,t:299,val:0.6},
+			       {w:167,t:292,val:0.7},
+			       {w:202,t:288,val:0.7},
+			       {w:233,t:288,val:0.7},
+			       {w:268,t:292,val:0.8},
+			       {w:299,t:299,val:0.8},
+			       {w:336,t:315,val:0.9},
+			       {w:375,t:367,val:1},
+			       {w:412,t:430,val:0.9},
+			       {w:445,t:443,val:0.8},
+			       {w:483,t:453,val:0.8},
+			       {w:524,t:458,val:0.7},
+			       {w:556,t:458,val:0.7},
+			       {w:585,t:455,val:0.7},
+			       {w:612,t:450,val:0.6},
+			       {w:643,t:441,val:0.6},
+			       {w:672,t:426,val:0.6},
+			       {w:706,t:375,val:0.6},
+			       {w:672,t:328,val:0.6},
+			       {w:643,t:311,val:0.6},
+			       {w:612,t:303,val:0.6},
+			       {w:585,t:297,val:0.6},
+			       {w:556,t:294,val:0.7},
+			       {w:523,t:295,val:0.7},
+			       {w:482,t:300,val:0.7},
+			       {w:445,t:310,val:0.8},
+			       {w:413,t:325,val:0.8},
+			       {w:376,t:366,val:0.9},
+			       {w:357,t:406,val:1},
+			       {w:336,t:422,val:0.9},
+			       {w:300,t:437,val:0.8},
+			       {w:268,t:446,val:0.8},
+			       {w:232,t:450,val:0.7},
+			       {w:202,t:450,val:0.7},
+			       {w:166,t:448,val:0.7},
+			       {w:125,t:438,val:0.6},
+			       {w:97,t:426,val:0.6},
+			       {w:72,t:415,val:0.6},
+			       {w:46,t:366,val:0.6}]
+
+		  },
+		  methods: {
+		  	start:function(){
+		  		if(!this.show) return;
+                this.reverseMessage();
+		  	},
+		  	end:function(){
+		  		 this.show =true;
+                 clearInterval(this.intervalid1); 
+		  	},
+		    reverseMessage: function () {
+		    	console.log(111);
+		    	this.show =false;
+	            let _this =this;
+	            let i =1;
+	    		_this.styleObject = {
+				    top: '12.5rem',
+				    left: '2rem'
+				}
+		        this.intervalid1 = setInterval(() => {
+	                let length=_this.datas.length-1;
+	                if(i<length){
+	                    i++
+	          	        _this.styleObject.left = _this.datas[i].w*_this.width-20+"px" 
+	          	        _this.styleObject.top = _this.datas[i].t*_this.width-30+"px"
+	                }else{
+	                	i=0;
+	                	//clearInterval(this.intervalid1);
+	                	//_this.styleObject.left = "2"+"rem"
+	                	//_this.styleObject.top = 12.5+"rem" 
+	                }
+			    }, 10)
+		    }
+		  },
+		  mounted: function () {
+			  this.$nextTick(function () {
+			    // Code that will run only after the
+			    // entire view has been rendered
+			     this.width = document.body.clientWidth/750;
+			  })
+		  }
+
+		})
+
+   </script>
+
+
+
+
+</body>
+</html>
