@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>射击</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<script type="text/javascript" src="vue.js"></script>
+<style type="text/css">
+
+.ys1{ 
+   stroke-dasharray:980;  /*2006为螺旋线的长度*/
+   stroke-dashoffset:-460;
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<svg width="600px" height="600px" viewBox="0 0 600 650">
+
+ <path fill="none" id="road"  stroke="#ccc" fill="#fff" stroke-width="30" stroke-linecap="round" stroke-miterlimit="10" d="M66.9,517 
+c0,0-37.8-194,125.1-161.9S427.6,371.5,350,205.7S439.3,23.4,544,62.2"/>
+ <path fill="none" class="ys1"  stroke="#78EADF" fill="#fff" stroke-width="30" stroke-linecap="round" stroke-miterlimit="10" d="M66.9,517 
+c0,0-37.8-194,125.1-161.9S427.6,371.5,350,205.7S439.3,23.4,544,62.2"/>
+
+<defs>
+<g id="beatles">
+<circle fill="#F8B62D" r="20" >
+</circle>
+</g>
+</defs>
+
+<use xlink:href="#beatles" x="0" y="0">
+<animateMotion  fill="freezem" dur="3s" path="M66.9,517 
+c0,0-37.8-194,125.1-161.9S427.6,371.5,350,205.7S439.3,23.4,544,62.2"/><mpath xlink:href="#road"/></animateMotion>
+</use>
+
+
+
+
+</svg>
+
+
+<svg viewbox="0 0 500 500">
+    <circle r="100" cx="250" cy="250" stroke="#FF4E00" stroke-width="1" fill="#fff">
+    </circle>
+    <circle  r="10" cx="0" cy="0" fill="#00FF4E" stroke="none">
+        <animateMotion id="andom"
+                begin="0s"
+                path="M 250,350 A 100,100 0 0 0 250,150 A 100,100 0 0 0 250,350"
+                dur="5s" fill="freeze" repeatCount="indefinite">
+ 
+        </animateMotion>
+    </circle>
+    <text x="230" fill="#D51313" y="450" id="svgbtn" 
+    onclick="continueAn()" cursor="pointer">暂停</text>
+</svg>
+
+
+
+
+
+
+
+
+<script>
+    var svg=document.getElementsByTagName("svg")[0];
+    var btn=document.getElementById("svgbtn");
+    function continueAn(){
+        //判断动画是否暂停
+
+        if(svg.animationsPaused()) {
+            svg.unpauseAnimations();
+            btn.innerHTML="暂停";
+        }else{
+            svg.pauseAnimations();
+            btn.innerHTML="开始";
+        }
+    }
+</script>
+
+
+
+
+
+
+
+
+   <script type="text/javascript">
+
+   </script>
+
+
+
+
+</body>
+</html>
