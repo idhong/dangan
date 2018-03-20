@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style>
+	.ys1{ 
+		stroke-dasharray:1233.5; 
+	}
+	.ys2{ 
+		stroke-dasharray:0 0 0 1233; 
+	}
+	.ys3{ stroke-dashoffset:300;     
+		-webkit-transition: all .5s ease;
+	    -moz-transition: all .5s ease;
+	    -o-transition: all .5s ease;
+	    transition: all .5s ease;}
+
+/*	   stroke-dashoffset:000; */
+   </style>
+</head>
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg"  width="300px" height="300px"  viewBox="0 0 640 590">
+<defs>
+<path fill="none" id="one"  stroke-linecap="round" stroke-miterlimit="10" d="m508.61055,170.55504c-0.55555,0 68.3331,61.11093 53.88873,124.44408c-14.44437,63.33315 -170.55508,187.22167 -338.33234,208.33272c-167.77727,21.11105 -171.11059,-39.44433 -137.2218,-148.88845c33.88878,-109.44412 133.331,-216.11041 281.11027,-262.777"/>
+</defs>
+<use xlink:href="#one" x="0" y="0" stroke="#bfbfbf" stroke-width="9">
+</use>
+<use xlink:href="#one" class="ys1 ys3" stroke="#f87266" stroke-width="9" x="0" y="0">
+</use>
+<use xlink:href="#one" class="ys2 ys3" stroke="#f87266" stroke-width="18" x="0" y="0">
+</use>
+</svg>
+<script>
+var path = document.querySelector('#one');
+var length = path.getTotalLength();
+console.log(length);
+</script>
+</body>
+</html>

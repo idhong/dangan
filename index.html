@@ -10,19 +10,20 @@
       *{margin:0; padding:0;}
       html{  font-size:12px;}
       .bj{width:100%; height:32rem; background: url(image/aim.jpg) no-repeat center top; background-size:100%; position: relative }
-      .huan{width:6rem; height:6rem; position: absolute; top:12.5rem; left:0; background: url(image/328.png) no-repeat center top;  background-size:100%;
+      .huan{width:6rem; height:6rem; position: absolute; top:12.5rem; left:0; background: url(image/567.png) no-repeat center top;  background-size:100%;
           transition: all .03s  liner; -webkit-transition: all .03s  liner;}
-        .btn{width:10rem; height:10rem; height:3rem; line-height:3rem; background: #f11; color:#fff; text-align: center; margin:2rem auto; border-radius:1rem;}
+      .btn{width:10rem; height:10rem; height:3rem; line-height:3rem; background: #f11; color:#fff; text-align: center; margin:2rem auto; border-radius:1rem;}
     </style>
 </head>
 <body>
 <div id="app">
 
-   <div class="bj">
+   <div class="bj" id="mark">
      <div class="huan" :style="styleObject"></div>
    </div>
    {{message}}
-<div class="btn" @click="start()">start</div> <div class="btn" @click="end()">end</div> 
+<div class="btn" @click="start()">start</div> 
+<div class="btn" @click="end()">end</div> 
 </div>
    <script type="text/javascript">
 
@@ -33,99 +34,116 @@
 		    num:30,
 		    width:360,
 		    show:true,
+		    rings:6,
 		    styleObject: {
 			    top: '12.5rem',
 			    left: '0',
-			    val:0.6
+			    val:7,
+			    index:0
 			},
-			datas:[{w:46,t:366,val:0.6},
-			       {w:76,t:322,val:0.6},
-			       {w:97,t:310,val:0.6},
-			       {w:125,t:299,val:0.6},
-			       {w:167,t:292,val:0.7},
-			       {w:202,t:288,val:0.7},
-			       {w:233,t:288,val:0.7},
-			       {w:268,t:292,val:0.8},
-			       {w:299,t:299,val:0.8},
-			       {w:336,t:315,val:0.9},
-			       {w:375,t:367,val:1},
-			       {w:412,t:430,val:0.9},
-			       {w:445,t:443,val:0.8},
-			       {w:483,t:453,val:0.8},
-			       {w:524,t:458,val:0.7},
-			       {w:556,t:458,val:0.7},
-			       {w:585,t:455,val:0.7},
-			       {w:612,t:450,val:0.6},
-			       {w:643,t:441,val:0.6},
-			       {w:672,t:426,val:0.6},
-			       {w:706,t:375,val:0.6},
-			       {w:672,t:328,val:0.6},
-			       {w:643,t:311,val:0.6},
-			       {w:612,t:303,val:0.6},
-			       {w:585,t:297,val:0.6},
-			       {w:556,t:294,val:0.7},
-			       {w:523,t:295,val:0.7},
-			       {w:482,t:300,val:0.7},
-			       {w:445,t:310,val:0.8},
-			       {w:413,t:325,val:0.8},
-			       {w:376,t:366,val:0.9},
-			       {w:357,t:406,val:1},
-			       {w:336,t:422,val:0.9},
-			       {w:300,t:437,val:0.8},
-			       {w:268,t:446,val:0.8},
-			       {w:232,t:450,val:0.7},
-			       {w:202,t:450,val:0.7},
-			       {w:166,t:448,val:0.7},
-			       {w:125,t:438,val:0.6},
-			       {w:97,t:426,val:0.6},
-			       {w:72,t:415,val:0.6},
-			       {w:46,t:366,val:0.6}]
+			datas:[{w:133,t:223,val:7},
+			        {w:170,t:229,val:7},
+			        {w:202,t:241,val:7},
+			        {w:231,t:257,val:8},
+			        {w:260,t:277,val:8},
+			        {w:292,t:301,val:8},
+			        {w:325,t:332,val:9},
+			        {w:375,t:375,val:10},
+			        {w:420,t:414,val:9},
+			        {w:464,t:448,val:8},
+			        {w:489,t:468,val:8},
+					{w:518,t:487,val:8},
+					{w:448,t:506,val:7},
+					{w:580,t:518,val:7},
+					{w:618,t:521,val:7},
+					{w:661,t:503,val:6},
+					{w:696,t:448,val:6},
+					{w:712,t:375,val:6},
+					{w:696,t:292,val:6},
+					{w:661,t:238,val:6},
+					{w:618,t:223,val:7},
+					{w:583,t:228,val:7},
+					{w:548,t:241,val:7},
+					{w:515,t:260,val:8},
+					{w:488,t:277,val:8},
+					{w:461,t:298,val:8},
+					{w:420,t:332,val:9},
+					{w:375,t:375,val:10},
+					{w:331,t:414,val:9},
+					{w:286,t:448,val:8},
+					{w:263,t:468,val:8},
+					{w:231,t:490,val:8},
+					{w:205,t:503,val:7},
+					{w:167,t:517,val:7},
+					{w:130,t:521,val:7},
+					{w:81,t:497,val:6},
+					{w:48,t:435,val:6},
+					{w:36,t:375,val:6},
+					{w:48,t:307,val:6},
+					{w:78,t:251,val:6}]
 
 		  },
 		  methods: {
 		  	start:function(){
 		  		if(!this.show) return;
+		  		var  rings =[6,7,8,9,10];
+               // this.rings = parseInt(5+ 5*Math.random());
+                this.rings =10;   //这里替换成从接口获取
                 this.reverseMessage();
 		  	},
 		  	end:function(){
 		  		 let _this =this;
 		  		 if(this.show) return;
-		  		 this.show =true;
-                 clearInterval(this.intervalid1);
-                 this.message ="恭喜你中了"+_this.styleObject.val*10+"环";
-                 
+		  		 
+		  		 //控制什么时候停止
+                 for(let i=_this.styleObject.index,length=this.datas.length;i<length;i++){
+                        _this.styleObject ={
+                        	left:(_this.datas[i].w-50)*_this.width+"px",
+                        	top:(_this.datas[i].t-50)*_this.width+"px",
+                        	val:_this.datas[i].val,
+                        	index:i
+                        }
+                        if(this.rings==this.datas[i].val){
+                        	 _this.show =true;
+			                 clearInterval(this.intervalid1);
+			                 //换成弹框
+			                 _this.message ="恭喜你中了"+_this.styleObject.val+"环";
+	                         break;  
+                        }
+                        
+                 }   
 		  	},
 		    reverseMessage: function () {
-		    	console.log(111);
 		    	this.show =false;
 	            let _this =this;
 	            let i =1;
+	            this.message ="射击中";
+
 	    		_this.styleObject = {
 				    top: '12.5rem',
-				    left: '2rem'
+				    left: '2rem',
+				    val:7,
+			        index:0
 				}
 		        this.intervalid1 = setInterval(() => {
 	                let length=_this.datas.length-1;
 	                if(i<length){
 	                    i++
-	          	        _this.styleObject.left = _this.datas[i].w*_this.width-20+"px"; 
-	          	        _this.styleObject.top = _this.datas[i].t*_this.width-30+"px";
-	          	        _this.styleObject.val = _this.datas[i].val;
-	              
+                        _this.styleObject ={
+                        	left:(_this.datas[i].w-50)*_this.width+"px",
+                        	top:(_this.datas[i].t-50)*_this.width+"px",
+                        	val:_this.datas[i].val,
+                        	index:i
+                        }
 	                }else{
 	                	i=0;
-	                	//clearInterval(this.intervalid1);
-	                	//_this.styleObject.left = "2"+"rem"
-	                	//_this.styleObject.top = 12.5+"rem" 
 	                }
 			    }, 10)
 		    }
 		  },
 		  mounted: function () {
 			  this.$nextTick(function () {
-			    // Code that will run only after the
-			    // entire view has been rendered
-			     this.width = document.body.clientWidth/750;
+			     this.width = document.getElementById("mark").offsetWidth/750;  //按比例缩放靶大小，把页面宽度换成div宽度
 			  })
 		  }
 
