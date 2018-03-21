@@ -94,9 +94,10 @@
 		  	end:function(){
 		  		 let _this =this;
 		  		 if(this.show) return;
-		  		 
+		  		 console.log(111);
 		  		 //控制什么时候停止
-                 for(let i=_this.styleObject.index,length=this.datas.length;i<length;i++){
+                 for(let i=_this.styleObject.index,length=this.datas.length;i<=length;i++){
+
                         _this.styleObject ={
                         	left:(_this.datas[i].w-50)*_this.width+"px",
                         	top:(_this.datas[i].t-50)*_this.width+"px",
@@ -112,6 +113,7 @@
                         }
                         
                  }   
+
 		  	},
 		    reverseMessage: function () {
 		    	this.show =false;
