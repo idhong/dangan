@@ -26,6 +26,8 @@
 <div class="btn" @click="end()">end</div> 
 </div>
    <script type="text/javascript">
+        
+        
 
 		var app = new Vue({
 		  el: '#app',
@@ -41,6 +43,8 @@
 			    val:7,
 			    index:0
 			},
+			stop:false,
+			dataVal:[],
 			datas:[{w:133,t:223,val:7},
 			        {w:170,t:229,val:7},
 			        {w:202,t:241,val:7},
@@ -127,19 +131,39 @@
 				    val:7,
 			        index:0
 				}
+
+
 		        this.intervalid1 = setInterval(() => {
+	                
 	                let length=_this.datas.length-1;
-	                if(i<length){
-	                    i++
-                        _this.styleObject ={
-                        	left:(_this.datas[i].w-50)*_this.width+"px",
-                        	top:(_this.datas[i].t-50)*_this.width+"px",
-                        	val:_this.datas[i].val,
-                        	index:i
-                        }
+	                
+	                if(!_this.stop){
+		                if(i<length){ 
+		                    i++
+	                        _this.styleObject ={
+	                        	left:(_this.datas[i].w-50)*_this.width+"px",
+	                        	top:(_this.datas[i].t-50)*_this.width+"px",
+	                        	val:_this.datas[i].val,
+	                        	index:i
+	                        }
+	                        _this.dataVal.push(_this.styleObject);
+		                }else{
+		                	i=0;
+		                	_this.stop =true;
+		                }	
 	                }else{
-	                	i=0;
+		                if(i<length){ 
+		                    i++
+	                        _this.styleObject =  _this.dataVal[i];
+		                }else{
+		                	i=0;
+		                }	
+
 	                }
+                    
+
+
+
 			    }, 10)
 		    }
 		  },
