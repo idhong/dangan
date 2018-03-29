@@ -138,31 +138,27 @@
 	                let length=_this.datas.length-1;
 	                
 	                if(!_this.stop){
-		                if(i<length){ 
-		                    i++
-	                        _this.styleObject ={
-	                        	left:(_this.datas[i].w-50)*_this.width+"px",
-	                        	top:(_this.datas[i].t-50)*_this.width+"px",
-	                        	val:_this.datas[i].val,
-	                        	index:i
-	                        }
-	                        _this.dataVal.push(_this.styleObject);
-		                }else{
-		                	i=0;
-		                	_this.stop =true;
-		                }	
+			                if(i<length){ 
+			                    i++
+		                        _this.styleObject ={
+		                        	left:(_this.datas[i].w-50)*_this.width+"px",
+		                        	top:(_this.datas[i].t-50)*_this.width+"px",
+		                        	val:_this.datas[i].val,
+		                        	index:i
+		                        }
+		                        _this.dataVal.push(_this.styleObject);
+			                }else{
+			                	i=0;
+			                	_this.stop =true;
+			                }	
 	                }else{
-		                if(i<length){ 
-		                    i++
-	                        _this.styleObject =  _this.dataVal[i];
-		                }else{
-		                	i=0;
-		                }	
-
+			                if(i<length){ 
+			                    i++
+		                        _this.styleObject =  _this.dataVal[i];
+			                }else{
+			                	i=0;
+			                }	
 	                }
-                    
-
-
 
 			    }, 10)
 		    }
