@@ -1921,59 +1921,95 @@ processContent({ url: {port: 8000} })
 
 let obj = { foo: 123 };
 Object.getOwnPropertyDescriptor(obj, 'foo')
-//  {
-//    value: 123,
-//    writable: true,
-//    enumerable: true,
-//    configurable: true
-//  }
-描述对象的enumerable属性，称为”可枚举性“，如果该属性为false，就表示某些操作会忽略当前属性。
 
-目前，有四个操作会忽略enumerable为false的属性。
-
-for...in循环：只遍历对象自身的和继承的可枚举的属性。
-Object.keys()：返回对象自身的所有可枚举的属性的键名。
-JSON.stringify()：只串行化对象自身的可枚举的属性。
-Object.assign()： 忽略enumerable为false的属性，只拷贝对象自身的可枚举的属性。
-这四个操作之中，前三个是 ES5 就有的，最后一个Object.assign()是 ES6 新增的。其中，只有for...in会返回继承的属性，其他三个方法都会忽略继承的属性，只处理对象自身的属性。实际上，引入“可枚举”（enumerable）这个概念的最初目的，就是让某些属性可以规避掉for...in操作，不然所有内部属性和方法都会被遍历到。比如，对象原型的toString方法，以及数组的length属性，就通过“可枚举性”，从而避免被for...in遍历到。
+for...in
+Object.keys()
+JSON.stringify()
+Object.assign()
 
 Object.getOwnPropertyDescriptor(Object.prototype, 'toString').enumerable
 // false
 
 Object.getOwnPropertyDescriptor([], 'length').enumerable
 // false
-上面代码中，toString和length属性的enumerable都是false，因此for...in不会遍历到这两个继承自原型的属性。
-
-另外，ES6 规定，所有 Class 的原型的方法都是不可枚举的。
 
 Object.getOwnPropertyDescriptor(class {foo() {}}.prototype, 'foo').enumerable
-// false
-总的来说，操作中引入继承的属性会让问题复杂化，大多数时候，我们只关心对象自身的属性。所以，尽量不要用for...in循环，而用Object.keys()代替。
-
-属性的遍历
-ES6 一共有 5 种方法可以遍历对象的属性。
-
-for...in
-
-for...in循环遍历对象自身的和继承的可枚举属性（不含 Symbol 属性）。
-
-Object.keys(obj)
-
-Object.keys返回一个数组，包括对象自身的（不含继承的）所有可枚举属性（不含 Symbol 属性）的键名。
-
 Object.getOwnPropertyNames(obj)
-
-Object.getOwnPropertyNames返回一个数组，包含对象自身的所有属性（不含 Symbol 属性，但是包括不可枚举属性）的键名。
-
 Object.getOwnPropertySymbols(obj)
 Reflect.ownKeys(obj)
-
 Object.getOwnPropertyDescriptors()
 
-__proto__属性，Object.setPrototypeOf()，Object.getPrototypeOf()__proto__属性，Object.setPrototypeOf()，Object.getPrototypeOf()
+function getOwnPropertyDescriptors(obj) {
+  const result = {};
+  for (let key of Reflect.ownKeys(obj)) {
+    result[key] = Object.getOwnPropertyDescriptor(obj, key);
+  }
+  return result;
+}
+
+const source = {
+  set foo(value) {
+    console.log(value);
+  }
+};
+
+const target1 = {};
+Object.assign(target1, source);
+
+Object.getOwnPropertyDescriptor(target1, 'foo')
+
+const shallowMerge = (target, source) => Object.defineProperties(
+  target,
+  Object.getOwnPropertyDescriptors(source)
+);
+
+const clone = Object.create(Object.getPrototypeOf(obj),
+  Object.getOwnPropertyDescriptors(obj));
+
+// 或者
+
+const shallowClone = (obj) => Object.create(
+  Object.getPrototypeOf(obj),
+  Object.getOwnPropertyDescriptors(obj)
+);
+const obj = Object.create(
+  prot,
+  Object.getOwnPropertyDescriptors({
+    foo: 123,
+  })
+);
+__proto__属性，Object.setPrototypeOf()，Object.getPrototypeOf() § ⇧
 
 
-__proto__属性，Object.setPrototypeOf()，Object.getPrototypeOf()
+// es6 的写法
+const obj = {
+  method: function() { ... }
+};
+obj.__proto__ = someOtherObj;
+
+// es5 的写法
+var obj = Object.create(someOtherObj);
+obj.method = function() { ... };
+
+Object.setPrototypeOf() 
+// 格式
+Object.setPrototypeOf(object, prototype)
+
+// 用法
+const o = Object.setPrototypeOf({}, null);
+let proto = {};
+let obj = { x: 10 };
+Object.setPrototypeOf(obj, proto);
+
+proto.y = 20;
+proto.z = 40;
+
+obj.x // 10
+obj.y // 20
+obj.z // 40
+Object.setPrototypeOf(1, {}) === 1 // true
+Object.setPrototypeOf('foo', {}) === 'foo' // true
+Object.setPrototypeOf(true, {}) === true // true
 
 const proto = {
   foo: 'hello'
@@ -1988,7 +2024,74 @@ const obj = {
 
 Object.setPrototypeOf(obj, proto);
 obj.find() // "hello"
+// 报错
+const obj = {
+  foo: super.foo
+}
+
+// 报错
+const obj = {
+  foo: () => super.foo
+}
+
+// 报错
+const obj = {
+  foo: function () {
+    return super.foo
+  }
+}
 
 Object.keys()，Object.values()，Object.entries()
-
+Object.keys()，Object.values()，Object.entries()
+const obj = Object.create({}, {p: {value: 42}});
+Object.values(obj) // []
+let obj = { one: 1, two: 2 };
+for (let [k, v] of Object.entries(obj)) {
+  console.log(
+    `${JSON.stringify(k)}: ${JSON.stringify(v)}`
+  );
+}
+const obj = { foo: 'bar', baz: 42 };
+const map = new Map(Object.entries(obj));
+map // Map { foo: "bar", baz: 42 }
 let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+x // 1
+y // 2
+z // { a: 3, b: 4 }
+
+function baseFunction({ a, b }) {
+  // ...
+}
+function wrapperFunction({ x, y, ...restConfig }) {
+  // 使用 x 和 y 参数进行操作
+  // 其余参数传给原始函数
+  return baseFunction(restConfig);
+}
+let aClone = { ...a };
+// 等同于
+let aClone = Object.assign({}, a);
+
+let aWithDefaults = { x: 1, y: 2, ...a };
+// 等同于
+ even if property keys don’t clash, because objects record insertion order:
+
+let aWithDefaults = Object.assign({}, { x: 1, y: 2 }, a);
+// 等同于
+let aWithDefaults = Object.assign({ x: 1, y: 2 }, a);
+
+let aWithXGetter = {
+  ...a,
+  get x() {
+    throw new Error('not throw yet');
+  }
+};
+
+// 会抛出错误，因为 x 属性被执行了
+let runtimeError = {
+  ...a,
+  ...{
+    get x() {
+      throw new Error('throw now');
+    }
+  }
+};
