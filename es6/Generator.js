@@ -327,5 +327,195 @@ for(let value of delegatingIterator) {
 // "Bye!"
 // "Ok, bye."
 
+function* concat(iter1, iter2) {
+  yield* iter1;
+  yield* iter2;
+}
+
+// 等同于
+
+function* concat(iter1, iter2) {
+  for (var value of iter1) {
+    yield value;
+  }
+  for (var value of iter2) {
+    yield value;
+  }
+}
+
+function* foo() {
+  yield 2;
+  yield 3;
+  return "foo";
+}
+
+function* bar() {
+  yield 1;
+  var v = yield* foo();
+  console.log("v: " + v);
+  yield 4;
+}
+
+var it = bar();
+
+it.next()
+// {value: 1, done: false}
+it.next()
+// {value: 2, done: false}
+it.next()
+// {value: 3, done: false}
+it.next();
+// "v: foo"
+// {value: 4, done: false}
+it.next()
+
+function* genFuncWithReturn() {
+  yield 'a';
+  yield 'b';
+  return 'The result';
+}
+function* logReturned(genObj) {
+  let result = yield* genObj;
+  console.log(result);
+}
+
+[...logReturned(genFuncWithReturn())]
+
+function* iterTree(tree) {
+  if (Array.isArray(tree)) {
+    for(let i=0; i < tree.length; i++) {
+      yield* iterTree(tree[i]);
+    }
+  } else {
+    yield tree;
+  }
+}
+
+const tree = [ 'a', ['b', 'c'], ['d', 'e'] ];
+
+for(let x of iterTree(tree)) {
+  console.log(x);
+}
 
 
+function* iterTree(tree) {
+  if (Array.isArray(tree)) {
+    for(let i=0; i < tree.length; i++) {
+      yield* iterTree(tree[i]);
+    }
+  } else {
+    yield tree;
+  }
+}
+
+const tree = [ 'a', ['b', 'c'], ['d', 'e'] ];
+
+for(let x of iterTree(tree)) {
+  console.log(x);
+}
+
+function* g() {}
+
+g.prototype.hello = function () {
+  return 'hi!';
+};
+
+let obj = g();
+
+obj instanceof g // true
+obj.hello() // 'hi!'
+
+function* F() {
+  this.a = 1;
+  yield this.b = 2;
+  yield this.c = 3;
+}
+var obj = {};
+var f = F.call(obj);
+
+f.next();  // Object {value: 2, done: false}
+f.next();  // Object {value: 3, done: false}
+f.next();  // Object {value: undefined, done: true}
+
+obj.a // 1
+obj.b // 2
+obj.c // 3
+
+function* loadUI() {
+  showLoadingScreen();
+  yield loadUIDataAsynchronously();
+  hideLoadingScreen();
+}
+var loader = loadUI();
+// 加载UI
+loader.next()
+
+// 卸载UI
+loader.next()
+
+function* main() {
+  var result = yield request("http://some.url");
+  var resp = JSON.parse(result);
+    console.log(resp.value);
+}
+
+function request(url) {
+  makeAjaxCall(url, function(response){
+    it.next(response);
+  });
+}
+
+var it = main();
+it.next();
+
+step1(function (value1) {
+  step2(value1, function(value2) {
+    step3(value2, function(value3) {
+      step4(value3, function(value4) {
+        // Do something with value4
+      });
+    });
+  });
+});
+
+
+function* longRunningTask(value1) {
+  try {
+    var value2 = yield step1(value1);
+    var value3 = yield step2(value2);
+    var value4 = yield step3(value3);
+    var value5 = yield step4(value4);
+    // Do something with value4
+  } catch (e) {
+    // Handle any error from step1 through step4
+  }
+}
+
+scheduler(longRunningTask(initialValue));
+
+function scheduler(task) {
+  var taskObj = task.next(task.value);
+  // 如果Generator函数未结束，就继续调用
+  if (!taskObj.done) {
+    task.value = taskObj.value
+    scheduler(task);
+  }
+}
+
+function* doStuff() {
+  yield fs.readFile.bind(null, 'hello.txt');
+  yield fs.readFile.bind(null, 'world.txt');
+  yield fs.readFile.bind(null, 'and-such.txt');
+}
+
+for (task of doStuff()) {
+  // task是一个函数，可以像回调函数那样使用它
+}
+
+function doStuff() {
+  return [
+    fs.readFile.bind(null, 'hello.txt'),
+    fs.readFile.bind(null, 'world.txt'),
+    fs.readFile.bind(null, 'and-such.txt')
+  ];
+}
