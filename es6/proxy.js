@@ -4,10 +4,13 @@ var obj = new Proxy({}, {
     return Reflect.get(target, key, receiver);
   },
   set: function (target, key, value, receiver) {
-    console.log(`setting ${key}!`);
+    console.log(target, key, value, receiver);
     return Reflect.set(target, key, value, receiver);
   }
 });
+
+//get时判断是否存在  拦截某属性不让其显示 set时判断是否满足某条件
+
 
 var proxy = new Proxy(target, handler);
 
@@ -189,3 +192,165 @@ function createWebService(baseUrl) {
     }
   });
 }
+
+apply()
+
+var handler = {
+   apply(target,ctx,args) {
+       return Reflect.apply(...arguments);
+   }
+}
+
+var target = function () { return 'I am the target'; };
+var handler = {
+  apply: function () {
+    return Reflect.apply(...arguments);
+  }
+};
+
+var p = new Proxy(target, handler);
+
+p(1,2,3)
+
+var twice = {
+  apply (target, ctx, args) {
+    return Reflect.apply(...arguments) * 2;
+  }
+};
+function sum (left, right) {
+  return left + right;
+};
+var proxy = new Proxy(sum, twice);
+proxy(1, 2) // 6
+proxy.call(null, 5, 6) // 22
+proxy.apply(null, [7, 8]) // 30
+
+
+
+construct()  //拦截new对象 必须返回对象
+
+var p = new Proxy(function () {}, {
+  construct: function(target, args) {
+    console.log('called: ' + args.join(', '));
+    return { value: args[0] * 10 };
+  }
+});
+
+(new p(1)).value
+
+var handler = {
+  deleteProperty (target, key) {
+    invariant(key, 'delete');
+    return true;
+  }
+};
+function invariant (key, action) {
+  if (key[0] === '_') {
+    throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+  }
+}
+
+var target = { _prop: 'foo' };
+var proxy = new Proxy(target, handler);
+delete proxy._prop
+
+var handler = {
+  defineProperty (target, key, descriptor) {
+    return false;
+  }
+};
+var target = {};
+var proxy = new Proxy(target, handler);
+proxy.foo = 'bar'
+
+var handler = {
+  defineProperty (target, key, descriptor) {
+    return false;
+  }
+};
+var target = {};
+var proxy = new Proxy(target, handler);
+proxy.foo = 'bar'
+
+var handler = {
+  getOwnPropertyDescriptor (target, key) {
+    if (key[0] === '_') {
+      return;
+    }
+    return Object.getOwnPropertyDescriptor(target, key);
+  }
+};
+var target = { _foo: 'bar', baz: 'tar' };
+var proxy = new Proxy(target, handler);
+Object.getOwnPropertyDescriptor(proxy, 'wat')
+// undefined
+Object.getOwnPropertyDescriptor(proxy, '_foo')
+// undefined
+Object.getOwnPropertyDescriptor(proxy, 'baz')
+
+var p = new Proxy({}, {
+  isExtensible: function(target) {
+    console.log("called");
+    return true;
+  }
+});
+
+Object.isExtensible(p)
+
+let target = {
+  a: 1,
+  b: 2,
+  c: 3
+};
+
+let handler = {
+  ownKeys(target) {
+    return ['a'];
+  }
+};
+
+let proxy = new Proxy(target, handler);
+
+Object.keys(proxy)
+
+let target = {
+  _bar: 'foo',
+  _prop: 'bar',
+  prop: 'baz'
+};
+
+let handler = {
+  ownKeys (target) {
+    return Reflect.ownKeys(target).filter(key => key[0] !== '_');
+  }
+};
+
+let proxy = new Proxy(target, handler);
+for (let key of Object.keys(proxy)) {
+  console.log(target[key]);
+}
+
+preventExtensions方法拦截Object.preventExtensions()。该方法必须返回一个布尔值，否则会被自动转为布尔值。
+
+
+var p = new Proxy({}, {
+  preventExtensions: function(target) {
+    console.log('called');
+    Object.preventExtensions(target);
+    return true;
+  }
+});
+
+Object.preventExtensions(p)
+
+setPrototypeOf()
+
+var handler = {
+  setPrototypeOf (target, proto) {
+    throw new Error('Changing the prototype is forbidden');
+  }
+};
+var proto = {};
+var target = function () {};
+var proxy = new Proxy(target, handler);
+Object.setPrototypeOf(proxy, proto);
