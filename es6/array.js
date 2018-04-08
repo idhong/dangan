@@ -209,3 +209,118 @@ i32a.copyWithin(0, 2);
 
 [NaN].findIndex(y => Object.is(NaN, y))
 // 0
+['a', 'b', 'c'].fill(7)
+new Array(3).fill(7)
+
+['a', 'b', 'c'].fill(7, 1, 2)
+
+let arr = new Array(3).fill({name: "Mike"});
+arr[0].name = "Ben";
+arr
+// [{name: "Ben"}, {name: "Ben"}, {name: "Ben"}]
+
+let arr = new Array(3).fill([]);
+arr[0].push(5);
+
+for (let index of ['a', 'b'].keys()) {
+  console.log(index);
+}
+// 0
+// 1
+
+for (let elem of ['a', 'b'].values()) {
+  console.log(elem);
+}
+// 'a'
+// 'b'
+
+for (let [index, elem] of ['a', 'b'].entries()) {
+  console.log(index, elem);
+}
+
+[1, 2, 3].includes(2)     // true
+[1, 2, 3].includes(4)     // false
+[1, 2, NaN].includes(NaN) // true
+
+[1, 2, 3].includes(3, 3);  // false
+[1, 2, 3].includes(3, -1); // true
+if (arr.indexOf(el) !== -1) {
+  // ...
+}
+
+const contains = (() =>
+  Array.prototype.includes
+    ? (arr, value) => arr.includes(value)
+    : (arr, value) => arr.some(el => el === value)
+)();
+contains(['foo', 'bar'], 'baz'); // => false
+
+Map.prototype.has(key)
+WeakMap.prototype.has(key)
+Reflect.has(target, propertyKey)
+Set.prototype.has(value)
+WeakSet.prototype.has(value)
+forEach(), filter(), reduce(), every() 和some()都会跳过空位。
+map()会跳过空位，但会保留这个值
+join()和toString()会将空
+
+[,'a'].forEach((x,i) => console.log(i)); // 1
+
+// filter方法
+['a',,'b'].filter(x => true) // ['a','b']
+
+// every方法
+[,'a'].every(x => x==='a') // true
+
+// reduce方法
+[1,,2].reduce((x,y) => return x+y) // 3
+
+// some方法
+[,'a'].some(x => x !== 'a') // false
+
+// map方法
+[,'a'].map(x => 1) // [,1]
+
+// join方法
+[,'a',undefined,null].join('#') // "#a##"
+
+// toString方法
+[,'a',undefined,null].toString() // ",a,,"
+
+Array.from(['a',,'b'])
+
+[...['a',,'b']]
+[,'a','b',,].copyWithin(2,0) // [,"a",,"a"]
+new Array(3).fill('a')
+
+let arr = [, ,];
+for (let i of arr) {
+  console.log(1);
+}
+
+// entries()
+[...[,'a'].entries()] // [[0,undefined], [1,"a"]]
+
+// keys()
+[...[,'a'].keys()] // [0,1]
+
+// values()
+[...[,'a'].values()] // [undefined,"a"]
+
+// find()
+[,'a'].find(x => true) // undefined
+
+// findIndex()
+[,'a'].findIndex(x => true) // 0
+
+Array.prototype.copyWithin(target, start = 0, end = this.length)
+
+
+
+
+
+
+
+
+
+

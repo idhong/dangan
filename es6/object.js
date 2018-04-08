@@ -240,6 +240,8 @@ obj2.a.b // 2
 
 const target = { a: { b: 'c', d: 'e' } }
 const source = { a: { b: 'hello' } }
+object.assign()
+
 Object.assign(target, source)
 // { a: { b: 'hello' } }
 
@@ -2095,3 +2097,77 @@ let runtimeError = {
     }
   }
 };
+super
+
+const proto = {
+  foo: 'hello'
+};
+
+const obj = {
+  foo: 'world',
+  find() {
+    return super.foo;
+  }
+};
+
+Object.setPrototypeOf(obj, proto);
+obj.find() // "hello"
+
+Object.getOwnPropertyDescriptors()
+function getOwnPropertyDescriptors(obj) {
+  const result = {};
+  for (let key of Reflect.ownKeys(obj)) {
+    result[key] = Object.getOwnPropertyDescriptor(obj, key);
+  }
+  return result;
+}
+
+const source = {
+  set foo(value) {
+    console.log(value);
+  }
+};
+
+const target1 = {};
+Object.assign(target1, source);
+
+Object.getOwnPropertyDescriptor(target1, 'foo')
+
+const shallowMerge = (target, source) => Object.defineProperties(
+  target,
+  Object.getOwnPropertyDescriptors(source)
+);
+
+const clone = Object.create(Object.getPrototypeOf(obj),
+  Object.getOwnPropertyDescriptors(obj));
+
+// 或者
+
+const shallowClone = (obj) => Object.create(
+  Object.getPrototypeOf(obj),
+  Object.getOwnPropertyDescriptors(obj)
+);
+__proto__属性，Object.setPrototypeOf()，Object.getPrototypeOf()
+
+// 格式
+Object.setPrototypeOf(object, prototype)
+
+// 用法
+const o = Object.setPrototypeOf({}, null);
+
+// 等同于 Object.getPrototypeOf(Number(1))
+Object.getPrototypeOf(1)
+// Number {[[PrimitiveValue]]: 0}
+
+// 等同于 Object.getPrototypeOf(String('foo'))
+Object.getPrototypeOf('foo')
+// String {length: 0, [[PrimitiveValue]]: ""}
+
+// 等同于 Object.getPrototypeOf(Boolean(true))
+Object.getPrototypeOf(true)
+// Boolean {[[PrimitiveValue]]: false}
+
+Object.getPrototypeOf(1) === Number.prototype // true
+Object.getPrototypeOf('foo') === String.prototype // true
+Object.getPrototypeOf(true) === Boolean.prototype // true
+
