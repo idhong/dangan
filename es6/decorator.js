@@ -8,7 +8,6 @@ function testable(target) {
 }
 
 MyTestableClass.isTestable // true
-
 @decorator
 class A {}
 
@@ -16,10 +15,6 @@ class A {}
 
 class A {}
 A = decorator(A) || A;
-
-function testable(target) {
-  // ...
-}
 
 function testable(isTestable) {
   return function(target) {
@@ -45,7 +40,6 @@ class MyTestableClass {}
 let obj = new MyTestableClass();
 obj.isTestable // true
 
-// mixins.js
 export function mixins(...list) {
   return function (target) {
     Object.assign(target.prototype, ...list)
@@ -79,7 +73,6 @@ obj.foo() // 'foo'
 class MyReactComponent extends React.Component {}
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyReactComponent);
-
 @connect(mapStateToProps, mapDispatchToProps)
 export default class MyReactComponent extends React.Component {}
 
@@ -123,12 +116,10 @@ class Math {
 
 function log(target, name, descriptor) {
   var oldValue = descriptor.value;
-
   descriptor.value = function() {
     console.log(`Calling ${name} with`, arguments);
     return oldValue.apply(null, arguments);
   };
-
   return descriptor;
 }
 
@@ -136,3 +127,94 @@ const math = new Math();
 
 // passed parameters should get logged now
 math.add(2, 4);
+
+@testable
+class Person {
+  @readonly
+  @nonenumerable
+  name() { return `${this.first} ${this.last}` }
+}
+
+function dec(id){
+  console.log('evaluated', id);
+  return (target, property, descriptor) => console.log('executed', id);
+}
+
+class Example {
+    @dec(1)
+    @dec(2)
+    method(){}
+}
+
+var counter = 0;
+
+var add = function () {
+  counter++;
+};
+
+@add
+function foo() {
+}
+
+@add
+function foo() {
+}
+
+var counter;
+var add;
+
+counter = 0;
+
+add = function () {
+  counter++;
+};
+core-decorators.js
+
+@autobind
+
+import { autobind } from 'core-decorators';
+
+class Person {
+  @autobind
+  getPerson() {
+    return this;
+  }
+}
+
+let person = new Person();
+let getPerson = person.getPerson;
+
+getPerson() === person;
+
+import { readonly } from 'core-decorators';
+
+class Meal {
+  @readonly
+  entree = 'steak';
+}
+
+var dinner = new Meal();
+dinner.entree = 'salmon';
+
+import { override } from 'core-decorators';
+
+class Parent {
+  speak(first, second) {}
+}
+
+class Child extends Parent {
+  @override
+  speak() {}
+  // SyntaxError: Child#speak() does not properly override Parent#speak(first, second)
+}
+
+// or
+
+class Child extends Parent {
+  @override
+  speaks() {}
+  // SyntaxError: No descriptor matching Child#speaks() was found on the prototype chain.
+  //
+  //   Did you mean "speak"?
+}
+
