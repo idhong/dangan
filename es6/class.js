@@ -9,6 +9,7 @@ Point.prototype.toString = function () {
 
 var p = new Point(1, 2);
 
+
 //定义类
 class Point {
   constructor(x, y) {
@@ -292,3 +293,128 @@ function selfish (target) {
 
 const logger = selfish(new Logger());
 
+var colors = ['red', 'green', 'blue'];
+// 扩展Array.prototype
+Array.prototype.demo = function () {};
+
+for (var i in colors) {
+  console.log(i); // 输出: 0 1 2 demo
+}
+
+// 查看原生的方法[[enumberable]]特征，这里以splice为例
+Array.prototype.propertyIsEnumerable('splice'); // false
+Object.getOwnPropertyDescriptor(Array.prototype, 'splice'); // {writable: true, enumerable: false, configurable: true}
+
+// 查看 demo 属性的特性
+Array.prototype.propertyIsEnumerable('demo'); // true
+Object.getOwnPropertyDescriptor(Array.prototype, 'demo'); // {writable: true, enumerable: true, configurable: true}
+
+var colors = ['red', 'green', 'blue'];
+Object.defineProperty(Array.prototype, 'demo', {
+  enumerable: false,
+  value: function() {}
+});
+
+Array.prototype.propertyIsEnumerable('demo'); // false
+Object.getOwnPropertyDescriptor(Array.prototype, 'demo'); // {writable: false, enumerable: false, configurable: false}
+
+for (var i in colors) {
+  console.log(i); // 输出：0 1 2
+}
+
+// 或者使用 hasOwnProperty
+var colors = ['red', 'green', 'blue'];
+Array.prototype.demo = function() {};
+
+// 安全使用hasOwnProperty方法
+var hasOwn = Object.prototype.hasOwnProperty;
+for (var i in colors) {
+  if (hasOwn.call(colors, i)) {
+    console.log(i); // 输出：0 1 2
+  }
+}
+
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+Person.prototype.getName = function() {
+  return this.name;
+}
+
+// 实例化
+var jenemy = new Person('jenemy', 25);
+
+for (var prop in Person) {
+  console.log(prop); // name age getName
+}
+
+var hasOwn = Object.prototype.hasOwnProperty;
+for (var prop2 in jenemy) {
+  if (hasOwn.call(jenemy, prop2)) {
+    console.log(prop2); // name age
+  }
+}
+
+// 遍历数组
+var colors = ['red', 'green', 'blue'];
+colors.length = 10;
+colors.push('yellow');
+Array.prototype.demo = function () {};
+
+Object.keys(colors); // 0 1 2 10
+
+// 遍历对象
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+Person.prototype.demo = function() {};
+
+var jenemy = new Person('jenemy', 25);
+
+Object.keys(jenemy); // name age
+
+// From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
+if (!Object.keys) {
+  Object.keys = (function() {
+    'use strict';
+    var hasOwn = Object.prototype.hasOwnProperty,
+        hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'),
+        dontEnums = [
+          'toString',
+          'toLocaleString',
+          'valueOf',
+          'hasOwnProperty',
+          'isPrototypeOf',
+          'propertyIsEnumerable',
+          'constructor'
+        ],
+        dontEnumsLength = dontEnums.length;
+
+      return function(obj) {
+        if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
+          throw new TypeError('Object.keys called on non-object');
+        }
+
+        var result = [], prop, i;
+
+        for (prop in obj) {
+          if (hasOwn.call(obj, prop)) {
+            result.push(prop);
+          }
+        }
+
+        if (hasDontEnumBug) {
+          for (i = 0; i < dontEnumsLength; i++) {
+            if (hasOwn.call(obj, dontEnums[i])) {
+              result.push(dontEnums[i]);
+            }
+          }
+        }
+        return result;
+      }
+  }) ();
+}
