@@ -9,6 +9,16 @@ var obj = new Proxy({}, {
   }
 });
 
+var obj = new Proxy({},{
+    get: function(target, key, receiver){
+      return Reflect.get(target,key,receiver)
+    },
+    set: function(target, key, value, receiver){
+      return Reflect.set(target, key, value, receiver)
+    }
+
+})
+
 //get时判断是否存在  拦截某属性不让其显示 set时判断是否满足某条件
 
 
