@@ -9,6 +9,15 @@ Point.prototype.toString = function () {
 
 var p = new Point(1, 2);
 
+class Point {
+   constructor(x,y){
+     this.x =x;
+     this.y =y;
+   }
+   toString(){
+    return this.x+","+this.y
+   }
+}
 
 //定义类
 class Point {
