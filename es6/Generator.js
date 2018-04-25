@@ -6,6 +6,20 @@ function* helloWorldGenerator() {
 
 var hw = helloWorldGenerator();
 
+
+function* helloWorldGenerator() {
+  yield 'hello';
+  yield 'world';
+  return 'ending';
+}
+
+var hw = helloWorldGenerator();
+
+function* helloWorldGenerator() {
+  yield 'hello';
+  
+}
+
 function* f() {
   console.log('执行了！')
 }
